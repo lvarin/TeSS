@@ -45,7 +45,11 @@ RUN bundle check || bundle install
 COPY . .
 
 # precompile assets
-RUN bundle exec rake assets:precompile
+RUN test ! -f "config/secrets.yml" &&  \
+    cp config/secrets.example.yml config/secrets.yml; \
+    test ! -f "config/tess.yml" && \
+    cp config/tess.example.yml config/tess.yml; \
+    bundle exec rake assets:precompile
 
 
 ARG CR
